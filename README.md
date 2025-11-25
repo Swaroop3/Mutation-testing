@@ -24,7 +24,13 @@
   - Unit: pricing math, promo eligibility/stacking, tax/rounding, shipping thresholds, money arithmetic.
   - Integration: cart limits/stock checks, checkout success/failure paths, inventory reserve/commit/release, payment outcomes, order persistence.
 - Coverage: ≥90% line coverage on mutated classes; mutation score: 68%, survivors documented in reports for follow-up.
-- Snapshots: `docs/screenshots/test-summary.png`, `docs/screenshots/pit-summary.png`, `docs/screenshots/pit-survivors.png`, `docs/screenshots/class_diagram.png`, `docs/screenshots/checkout_sequence.png`.
+
+## Screenshots
+- Test summary: ![Test summary](docs/screenshots/test-summary.png)
+- PIT summary: ![PIT summary](docs/screenshots/pit-summary.png)
+- PIT survivors: ![PIT survivors](docs/screenshots/pit-survivors.png)
+- Class diagram: ![Class diagram](docs/screenshots/class_diagram.png)
+- Checkout sequence: ![Checkout sequence](docs/screenshots/checkout_sequence.png)
 
 ## Mutation Results (PIT)
 - Score: 68% (line coverage on mutated classes: 431/478 ≈90%).
