@@ -1,7 +1,7 @@
-# E-commerce Cart & Checkout (Mutation Testing Project)
+# E-commerce Cart & Checkout (Mutation Testing)
 
 ## Overview
-- Java 17 implementation of a cart/checkout pipeline with pricing, promotions, tax, shipping, inventory, payments, and order persistence.
+- Java 21 implementation of a cart/checkout pipeline with pricing, promotions, tax, shipping, inventory, payments, and order persistence.
 - Targeted for mutation-testing using PIT.
 - Repository link: [REPO LINK](https://github.com/Swaroop3/Mutation-testing).
 
@@ -16,7 +16,7 @@
 - Build & tests: `mvn test`
 - Mutation testing (PIT): `mvn org.pitest:pitest-maven:mutationCoverage`
   - Reports: open `target/pit-reports/index.html`; text summaries in `target/pit-reports/mutation_summary.txt`.
-- Java version: 17; dependencies managed via Maven (`pom.xml`).
+- Java version: 21; dependencies managed via Maven (`pom.xml`).
 
 ## Testing & Mutation Strategy
 - Framework: JUnit; PIT with explicit operators (unit-oriented: conditionals boundary, negate conditionals, math; integration/contract: void-method-call, null/empty returns, boolean return mutators).
@@ -42,7 +42,7 @@
 - Totals: gen 264 / killed 180 / survived 33 / no-cov 46
 
 ## How to Reproduce
-1) Ensure JDK 17 and Maven are installed.
+1) Ensure JDK 21 and Maven are installed.
 2) `mvn test`
 3) `mvn org.pitest:pitest-maven:mutationCoverage`
 4) Review `target/pit-reports/index.html` (or the text summaries).
