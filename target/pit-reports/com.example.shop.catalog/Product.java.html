@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+    <link rel="stylesheet" type="text/css" href="../style.css">
+</head>
+<body>
+
+
+<h1>Product.java</h1>
+
+<table class="src">
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@74764622_1'/>
+1
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@74764622_1'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>package com.example.shop.catalog;</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@74764622_2'/>
+2
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@74764622_2'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@74764622_3'/>
+3
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@74764622_3'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>import com.example.shop.util.Money;</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@74764622_4'/>
+4
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@74764622_4'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>import java.util.Objects;</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@74764622_5'/>
+5
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@74764622_5'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@74764622_6'/>
+6
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@74764622_6'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>public final class Product {</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@74764622_7'/>
+7
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@74764622_7'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>    private final String id;</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@74764622_8'/>
+8
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@74764622_8'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>    private final String name;</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@74764622_9'/>
+9
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@74764622_9'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>    private final String category;</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@74764622_10'/>
+10
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@74764622_10'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>    private final Money price;</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@74764622_11'/>
+11
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@74764622_11'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>    private final TaxCode taxCode;</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@74764622_12'/>
+12
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@74764622_12'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>    private final boolean digital;</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@74764622_13'/>
+13
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@74764622_13'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>    private final boolean fragile;</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@74764622_14'/>
+14
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@74764622_14'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@74764622_15'/>
+15
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@74764622_15'></a>
+<span>
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class=''>    public Product(String id, String name, String category, Money price, TaxCode taxCode, boolean digital, boolean fragile) {</span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@74764622_16'/>
+16
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@74764622_16'></a>
+<span>
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class=''>        this.id = Objects.requireNonNull(id, &#34;id&#34;);</span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@74764622_17'/>
+17
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@74764622_17'></a>
+<span>
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class=''>        this.name = Objects.requireNonNull(name, &#34;name&#34;);</span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@74764622_18'/>
+18
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@74764622_18'></a>
+<span>
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class=''>        this.category = Objects.requireNonNull(category, &#34;category&#34;);</span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@74764622_19'/>
+19
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@74764622_19'></a>
+<span>
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class=''>        this.price = Objects.requireNonNull(price, &#34;price&#34;);</span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@74764622_20'/>
+20
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@74764622_20'></a>
+<span>
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class=''>        this.taxCode = Objects.requireNonNull(taxCode, &#34;taxCode&#34;);</span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@74764622_21'/>
+21
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@74764622_21'></a>
+<span>
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class=''>        this.digital = digital;</span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@74764622_22'/>
+22
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@74764622_22'></a>
+<span>
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class=''>        this.fragile = fragile;</span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@74764622_23'/>
+23
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@74764622_23'></a>
+<span>
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class=''>    }</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@74764622_24'/>
+24
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@74764622_24'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@74764622_25'/>
+25
+</td>
+<td class='killed'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@74764622_25'>1</a>
+<span>
+1. id : replaced return value with &#34;&#34; for com/example/shop/catalog/Product::id &rarr; KILLED<br/>
+
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class='killed'>    public String id() { return id; }</span></pre></td></tr>
+
+
+<tr>
+<td class='uncovered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@74764622_26'/>
+26
+</td>
+<td class='survived'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@74764622_26'>1</a>
+<span>
+1. name : replaced return value with &#34;&#34; for com/example/shop/catalog/Product::name &rarr; NO_COVERAGE<br/>
+
+</span>
+</span>
+</td>
+<td class='uncovered'><pre><span  class='survived'>    public String name() { return name; }</span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@74764622_27'/>
+27
+</td>
+<td class='killed'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@74764622_27'>1</a>
+<span>
+1. category : replaced return value with &#34;&#34; for com/example/shop/catalog/Product::category &rarr; KILLED<br/>
+
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class='killed'>    public String category() { return category; }</span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@74764622_28'/>
+28
+</td>
+<td class='killed'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@74764622_28'>1</a>
+<span>
+1. price : replaced return value with null for com/example/shop/catalog/Product::price &rarr; KILLED<br/>
+
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class='killed'>    public Money price() { return price; }</span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@74764622_29'/>
+29
+</td>
+<td class='killed'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@74764622_29'>1</a>
+<span>
+1. taxCode : replaced return value with null for com/example/shop/catalog/Product::taxCode &rarr; KILLED<br/>
+
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class='killed'>    public TaxCode taxCode() { return taxCode; }</span></pre></td></tr>
+
+
+<tr>
+<td class='uncovered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@74764622_30'/>
+30
+</td>
+<td class='survived'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@74764622_30'>2</a>
+<span>
+1. isDigital : replaced boolean return with false for com/example/shop/catalog/Product::isDigital &rarr; NO_COVERAGE<br/>
+2. isDigital : replaced boolean return with true for com/example/shop/catalog/Product::isDigital &rarr; NO_COVERAGE<br/>
+
+</span>
+</span>
+</td>
+<td class='uncovered'><pre><span  class='survived'>    public boolean isDigital() { return digital; }</span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@74764622_31'/>
+31
+</td>
+<td class='killed'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@74764622_31'>2</a>
+<span>
+1. isFragile : replaced boolean return with false for com/example/shop/catalog/Product::isFragile &rarr; KILLED<br/>
+2. isFragile : replaced boolean return with true for com/example/shop/catalog/Product::isFragile &rarr; KILLED<br/>
+
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class='killed'>    public boolean isFragile() { return fragile; }</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@74764622_32'/>
+32
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@74764622_32'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>}</span></pre></td></tr>
+
+
+
+<tr><td></td><td></td><td><h2>Mutations</h2></td></tr>
+
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@74764622_25'>25</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@74764622_25'/> 
+
+<p class='KILLED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>id<br/><b>Killed by : </b>com.example.shop.promo.PromoEngineTest.[engine:junit-jupiter]/[class:com.example.shop.promo.PromoEngineTest]/[method:computesBogoDiscountUsingCheapestEligible()]</span></span> replaced return value with &#34;&#34; for com/example/shop/catalog/Product::id &rarr; KILLED</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@74764622_26'>26</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@74764622_26'/> 
+
+<p class='NO_COVERAGE'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>name<br/><b>Killed by : </b>none</span></span> replaced return value with &#34;&#34; for com/example/shop/catalog/Product::name &rarr; NO_COVERAGE</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@74764622_27'>27</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@74764622_27'/> 
+
+<p class='KILLED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>category<br/><b>Killed by : </b>com.example.shop.promo.PromoEngineTest.[engine:junit-jupiter]/[class:com.example.shop.promo.PromoEngineTest]/[method:computesBogoDiscountUsingCheapestEligible()]</span></span> replaced return value with &#34;&#34; for com/example/shop/catalog/Product::category &rarr; KILLED</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@74764622_28'>28</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@74764622_28'/> 
+
+<p class='KILLED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>price<br/><b>Killed by : </b>com.example.shop.pricing.ShippingCalculatorTest.[engine:junit-jupiter]/[class:com.example.shop.pricing.ShippingCalculatorTest]/[method:freeShippingAboveThreshold()]</span></span> replaced return value with null for com/example/shop/catalog/Product::price &rarr; KILLED</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@74764622_29'>29</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@74764622_29'/> 
+
+<p class='KILLED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>taxCode<br/><b>Killed by : </b>com.example.shop.pricing.TaxCalculatorTest.[engine:junit-jupiter]/[class:com.example.shop.pricing.TaxCalculatorTest]/[method:taxesBeforeDiscountWhenConfigured()]</span></span> replaced return value with null for com/example/shop/catalog/Product::taxCode &rarr; KILLED</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@74764622_30'>30</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@74764622_30'/> 
+
+<p class='NO_COVERAGE'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>isDigital<br/><b>Killed by : </b>none</span></span> replaced boolean return with false for com/example/shop/catalog/Product::isDigital &rarr; NO_COVERAGE</p> <p class='NO_COVERAGE'><span class='pop'>2.<span><b>2</b><br/><b>Location : </b>isDigital<br/><b>Killed by : </b>none</span></span> replaced boolean return with true for com/example/shop/catalog/Product::isDigital &rarr; NO_COVERAGE</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@74764622_31'>31</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@74764622_31'/> 
+
+<p class='KILLED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>isFragile<br/><b>Killed by : </b>com.example.shop.pricing.ShippingCalculatorTest.[engine:junit-jupiter]/[class:com.example.shop.pricing.ShippingCalculatorTest]/[method:addsFragileSurcharge()]</span></span> replaced boolean return with false for com/example/shop/catalog/Product::isFragile &rarr; KILLED</p> <p class='KILLED'><span class='pop'>2.<span><b>2</b><br/><b>Location : </b>isFragile<br/><b>Killed by : </b>com.example.shop.pricing.ShippingCalculatorTest.[engine:junit-jupiter]/[class:com.example.shop.pricing.ShippingCalculatorTest]/[method:usesBaseWhenNoFragileAndBelowThreshold()]</span></span> replaced boolean return with true for com/example/shop/catalog/Product::isFragile &rarr; KILLED</p> 
+</td>
+</tr>
+
+</table>
+
+
+<h2>Active mutators</h2>
+<ul>
+<li class='mutator'>CONDITIONALS_BOUNDARY</li>
+<li class='mutator'>EMPTY_RETURNS</li>
+<li class='mutator'>FALSE_RETURNS</li>
+<li class='mutator'>INCREMENTS</li>
+<li class='mutator'>INVERT_NEGS</li>
+<li class='mutator'>MATH</li>
+<li class='mutator'>NEGATE_CONDITIONALS</li>
+<li class='mutator'>NULL_RETURNS</li>
+<li class='mutator'>PRIMITIVE_RETURNS</li>
+<li class='mutator'>TRUE_RETURNS</li>
+<li class='mutator'>VOID_METHOD_CALLS</li>
+
+</ul>
+
+<h2>Tests examined</h2>
+<ul>
+<li>com.example.shop.pricing.ShippingCalculatorTest.[engine:junit-jupiter]/[class:com.example.shop.pricing.ShippingCalculatorTest]/[method:freeShippingAboveThreshold()] (0 ms)</li><li>com.example.shop.pricing.ShippingCalculatorTest.[engine:junit-jupiter]/[class:com.example.shop.pricing.ShippingCalculatorTest]/[method:usesBaseWhenNoFragileAndBelowThreshold()] (0 ms)</li><li>com.example.shop.pricing.ShippingCalculatorTest.[engine:junit-jupiter]/[class:com.example.shop.pricing.ShippingCalculatorTest]/[method:addsFragileSurcharge()] (0 ms)</li><li>com.example.shop.promo.PromoEngineTest.[engine:junit-jupiter]/[class:com.example.shop.promo.PromoEngineTest]/[method:respectsTierRestrictions()] (1 ms)</li><li>com.example.shop.promo.PromoEngineTest.[engine:junit-jupiter]/[class:com.example.shop.promo.PromoEngineTest]/[method:skipsExpiredPromotions()] (1 ms)</li><li>com.example.shop.promo.PromoEngineTest.[engine:junit-jupiter]/[class:com.example.shop.promo.PromoEngineTest]/[method:zeroPercentPromoProducesNoDiscount()] (1 ms)</li><li>com.example.shop.promo.PromoEngineTest.[engine:junit-jupiter]/[class:com.example.shop.promo.PromoEngineTest]/[method:enforcesMaxUsagePerUser()] (1 ms)</li><li>com.example.shop.promo.PromoEngineTest.[engine:junit-jupiter]/[class:com.example.shop.promo.PromoEngineTest]/[method:appliesPercentageAndStopsOnExclusive()] (1 ms)</li><li>com.example.shop.promo.PromoEngineTest.[engine:junit-jupiter]/[class:com.example.shop.promo.PromoEngineTest]/[method:computesBogoDiscountUsingCheapestEligible()] (1 ms)</li><li>com.example.shop.cart.CartServiceTest.[engine:junit-jupiter]/[class:com.example.shop.cart.CartServiceTest]/[method:updateFailsWhenItemMissingOrStockLow()] (1 ms)</li><li>com.example.shop.pricing.PriceCalculatorTest.[engine:junit-jupiter]/[class:com.example.shop.pricing.PriceCalculatorTest]/[method:calculatesSubtotalDiscountTaxAndShipping()] (1 ms)</li><li>com.example.shop.promo.PromoEngineTest.[engine:junit-jupiter]/[class:com.example.shop.promo.PromoEngineTest]/[method:appliesCategoryAndBogoAndFreeShipping()] (5 ms)</li><li>com.example.shop.pricing.PriceCalculatorTest.[engine:junit-jupiter]/[class:com.example.shop.pricing.PriceCalculatorTest]/[method:appliesFreeShippingPromotion()] (7 ms)</li><li>com.example.shop.cart.CartServiceTest.[engine:junit-jupiter]/[class:com.example.shop.cart.CartServiceTest]/[method:addUpdateRemoveItem()] (2 ms)</li><li>com.example.shop.checkout.CheckoutServiceTest.[engine:junit-jupiter]/[class:com.example.shop.checkout.CheckoutServiceTest]/[method:throwsWhenInventoryCannotBeReserved()] (2 ms)</li><li>com.example.shop.checkout.CheckoutServiceTest.[engine:junit-jupiter]/[class:com.example.shop.checkout.CheckoutServiceTest]/[method:completesCheckoutOnPaymentSuccess()] (2 ms)</li><li>com.example.shop.checkout.CheckoutServiceTest.[engine:junit-jupiter]/[class:com.example.shop.checkout.CheckoutServiceTest]/[method:releasesInventoryOnPaymentFailure()] (3 ms)</li><li>com.example.shop.cart.CartServiceTest.[engine:junit-jupiter]/[class:com.example.shop.cart.CartServiceTest]/[method:enforcesPerItemLimitAndLineLimit()] (21 ms)</li><li>com.example.shop.pricing.TaxCalculatorTest.[engine:junit-jupiter]/[class:com.example.shop.pricing.TaxCalculatorTest]/[method:taxesBeforeDiscountWhenConfigured()] (0 ms)</li><li>com.example.shop.pricing.TaxCalculatorTest.[engine:junit-jupiter]/[class:com.example.shop.pricing.TaxCalculatorTest]/[method:zeroRateProducesZeroTax()] (0 ms)</li><li>com.example.shop.pricing.TaxCalculatorTest.[engine:junit-jupiter]/[class:com.example.shop.pricing.TaxCalculatorTest]/[method:taxesAfterDiscount()] (0 ms)</li>
+</ul>
+
+<br/>
+
+Report generated by <a href='https://pitest.org'>PIT</a> 1.15.0
+
+</body>
+</html>

@@ -1,0 +1,29 @@
+digraph CheckoutSequence {
+  rankdir=LR;
+  node [shape=plaintext];
+
+  client [label="Client"];
+  checkout [label="CheckoutService"];
+  cartService [label="CartService"];
+  priceCalc [label="PriceCalculator\n(Promo/Tax/Ship)"];
+  inventory [label="InventoryService"];
+  payment [label="PaymentGateway"];
+  orderRepo [label="OrderRepository"];
+
+  client -> checkout [label="checkout(request)"];
+  checkout -> cartService [label="getCart(cartId)"]; 
+  cartService -> priceCalc [label="price(lines)"]; 
+  priceCalc -> cartService [label="PriceBreakdown"];
+  cartService -> checkout [label="Cart (totals)"];
+
+  checkout -> inventory [label="reserve(each line)"];
+  inventory -> checkout [label="reserved or fail"];
+
+  checkout -> payment [label="authorize(total)"];
+  payment -> checkout [label="PaymentResult (auth/decline/error)"];
+
+  checkout -> inventory [label="if auth: commit"];
+  checkout -> orderRepo [label="save(order)"];
+  checkout -> client [label="CheckoutResult"];
+  checkout -> inventory [style="dashed", label="if failure: release"];
+}

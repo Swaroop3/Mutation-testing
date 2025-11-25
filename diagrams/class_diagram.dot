@@ -1,0 +1,84 @@
+digraph G {
+  graph [rankdir=LR, fontsize=10];
+  node [shape=record, fontsize=10];
+
+  Money [label="{Money|+amount: BigDecimal\\l+currency: Currency\\l}"]; 
+  Clock [label="{Clock|+now(): Instant\\l+zone(): ZoneId\\l}"]; 
+  IdGen [label="{IdGenerator|+nextId(): String\\l}"]; 
+
+  User [label="{User|+id\\l+tier\\l+locale\\l}"]; 
+  Address [label="{Address|+line1\\l+city\\l+state\\l+country\\l+postal\\l}"]; 
+
+  Product [label="{Product|+id\\l+name\\l+category\\l+price: Money\\l+taxCode\\l+digital/fragile\\l}"]; 
+  Inventory [label="{InventoryService|+upsertStock\\l+available\\l+reserve\\l+release\\l+commit\\l}"]; 
+  TaxCode [label="TaxCode", shape=ellipse];
+
+  CartLine [label="{CartLine|+productId\\l+qty\\l+unitPrice\\l+discount\\l}"]; 
+  Cart [label="{Cart|+lines\\l+subtotal\\l+discounts\\l+taxes\\l+shipping\\l+total\\l}"]; 
+  CartService [label="{CartService|+carts: Map<cartId, lines>\\l+addItem\\l+updateQty\\l+removeItem\\l+getCart\\l}"]; 
+
+  Promotion [label="{Promotion|+code\\l+type\\l+percent/amount\\l+category\\l+combinable\\l+freeShip\\l+dates\\l+minSubtotal\\l+tiersAllowed\\l+maxUses\\l}"]; 
+  PromoEngine [label="{PromoEngine|+apply(lines,tier,user)\\l}"]; 
+  CouponValidator [label="{CouponValidator|+canUse\\l+recordUse\\l}"]; 
+  PromotionOutcome [label="{PromotionOutcome|+discount\\l+freeShipping\\l+codes\\l}"]; 
+
+  TaxCalc [label="{TaxCalculator|+taxFor\\l}"]; 
+  ShipCalc [label="{ShippingCalculator|+shippingFor\\l}"]; 
+  PriceBreak [label="{PriceBreakdown|+lines\\l+subtotal\\l+discounts\\l+taxes\\l+shipping\\l+total\\l}"]; 
+  PriceCalc [label="{PriceCalculator|+price(lines)\\l}"]; 
+
+  PaymentGateway [label="{PaymentGateway|+authorize\\l}"]; 
+  FakePay [label="{FakePaymentGateway|}"]; 
+  PaymentResult [label="{PaymentResult|+status\\l+authCode\\l+failureReason\\l}"]; 
+  PaymentStatus [label="PaymentStatus", shape=ellipse];
+
+  Order [label="{Order|+id\\l+lines\\l+total\\l+taxes\\l+shipping\\l+promotions\\l}"]; 
+  OrderRepo [label="{OrderRepository|+save\\l+findById\\l+all\\l}"]; 
+
+  CheckoutReq [label="{CheckoutRequest|+cartId\\l+user\\l+address\\l}"]; 
+  CheckoutRes [label="{CheckoutResult|+order\\l+paymentResult\\l}"]; 
+  CheckoutService [label="{CheckoutService|+checkout\\l}"]; 
+
+  // relationships
+  Product -> Money [label="price", arrowhead="vee"];
+  Product -> TaxCode [arrowhead="vee"];
+  Inventory -> Product [label="stock by id", arrowhead="vee"];
+
+  CartLine -> Product [label="productId", arrowhead="vee"];
+  Cart -> CartLine [arrowhead="vee"];
+  CartService -> Inventory [arrowhead="vee"];
+  CartService -> PriceCalc [arrowhead="vee"];
+  CartService -> Product [arrowhead="vee"];
+  CartService -> Cart [style="dashed", label="builds", arrowhead="vee"];
+
+  PromoEngine -> Promotion [arrowhead="vee"];
+  PromoEngine -> CouponValidator [arrowhead="vee"];
+  PromoEngine -> Product [arrowhead="vee"];
+  PromoEngine -> Clock [arrowhead="vee"];
+  PromoEngine -> PromotionOutcome [style="dashed", label="returns", arrowhead="vee"];
+
+  PriceCalc -> PromoEngine [arrowhead="vee"];
+  PriceCalc -> TaxCalc [arrowhead="vee"];
+  PriceCalc -> ShipCalc [arrowhead="vee"];
+  PriceCalc -> PriceBreak [style="dashed", label="returns", arrowhead="vee"];
+  ShipCalc -> Product [arrowhead="vee"];
+  TaxCalc -> Product [arrowhead="vee"];
+
+  FakePay -> PaymentGateway [arrowhead="empty"];
+  PaymentGateway -> PaymentResult [style="dashed", label="returns", arrowhead="vee"];
+  PaymentResult -> PaymentStatus [arrowhead="vee"];
+
+  Order -> CartLine [arrowhead="vee"];
+  Order -> Money [arrowhead="vee"];
+  OrderRepo -> Order [arrowhead="vee"];
+
+  CheckoutService -> CartService [arrowhead="vee"];
+  CheckoutService -> Inventory [arrowhead="vee"];
+  CheckoutService -> PaymentGateway [arrowhead="vee"];
+  CheckoutService -> OrderRepo [arrowhead="vee"];
+  CheckoutService -> IdGen [arrowhead="vee"];
+  CheckoutService -> Product [arrowhead="vee"];
+  CheckoutService -> CheckoutRes [style="dashed", label="returns", arrowhead="vee"];
+  CheckoutReq -> User [arrowhead="vee"];
+  CheckoutReq -> Address [arrowhead="vee"];
+}
