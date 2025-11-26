@@ -59,6 +59,7 @@
                     <threads>4</threads>
                     <outputFormats>
                         <param>HTML</param>
+                        <param>XML</param>
                     </outputFormats>
                     <junit5PluginVersion>1.2.1</junit5PluginVersion>
                 </configuration>

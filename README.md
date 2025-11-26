@@ -23,7 +23,7 @@
 - Test focus:
   - Unit: pricing math, promo eligibility/stacking, tax/rounding, shipping thresholds, money arithmetic.
   - Integration: cart limits/stock checks, checkout success/failure paths, inventory reserve/commit/release, payment outcomes, order persistence.
-- Coverage: ≥90% line coverage on mutated classes; mutation score: 68%, survivors documented in reports for follow-up.
+- Coverage: 95% line coverage on mutated classes; mutation score: 80%, survivors documented in reports for follow-up.
 
 ## Screenshots
 - Test summary: ![Test summary](docs/screenshots/test-summary.png)
@@ -33,19 +33,19 @@
 - Checkout sequence: ![Checkout sequence](docs/screenshots/checkout_sequence.png)
 
 ## Mutation Results (PIT)
-- Score: 68% (line coverage on mutated classes: 431/478 ≈90%).
+- Score: 80% (line coverage on mutated classes: 454/478 ≈95%).
 - Unit-oriented operators:
-  - ConditionalsBoundaryMutator: gen 25 / killed 9 / survived 16
-  - NegateConditionalsMutator: gen 64 / killed 54 / survived 6 / no-cov 4
-  - MathMutator: gen 7 / killed 7 / survived 0
-  - PrimitiveReturnsMutator: gen 4 / killed 3 / no-cov 1
+  - ConditionalsBoundaryMutator: gen 25 / killed 9 / survived 16 / no-cov 0
+  - NegateConditionalsMutator: gen 64 / killed 60 / survived 3 / no-cov 1
+  - MathMutator: gen 7 / killed 7 / survived 0 / no-cov 0
+  - PrimitiveReturnsMutator: gen 4 / killed 3 / survived 1 / no-cov 0
 - Integration/contract operators:
-  - VoidMethodCallMutator: gen 16 / killed 8 / survived 8
-  - NullReturnValsMutator: gen 84 / killed 65 / survived 2 / no-cov 17
-  - EmptyObjectReturnValsMutator: gen 36 / killed 18 / survived 1 / no-cov 17
-  - BooleanTrueReturnValsMutator: gen 17 / killed 7 / survived 5 / no-cov 5
-  - BooleanFalseReturnValsMutator: gen 11 / killed 9 / no-cov 2
-- Totals: gen 264 / killed 180 / survived 33 / no-cov 46
+  - VoidMethodCallMutator: gen 16 / killed 11 / survived 5 / no-cov 0
+  - NullReturnValsMutator: gen 84 / killed 72 / survived 2 / no-cov 10
+  - EmptyObjectReturnValsMutator: gen 36 / killed 30 / survived 1 / no-cov 5
+  - BooleanTrueReturnValsMutator: gen 17 / killed 9 / survived 5 / no-cov 3
+  - BooleanFalseReturnValsMutator: gen 11 / killed 9 / survived 0 / no-cov 2
+- Totals: gen 264 / killed 210 / survived 33 / no-cov 21
 
 ## How to Reproduce
 1) Ensure JDK 21 and Maven are installed.

@@ -1,0 +1,18 @@
+Mutation summary (latest PIT run)
+----------------------------------
+Unit-oriented operators:
+- ConditionalsBoundaryMutator: generated 25, killed 9, survived 16, no coverage 0
+- NegateConditionalsMutator: generated 64, killed 54, survived 6, no coverage 4
+- MathMutator: generated 7, killed 7, survived 0, no coverage 0
+- PrimitiveReturnsMutator: generated 4, killed 3, survived 0, no coverage 1
+
+Integration/contract operators:
+- VoidMethodCallMutator: generated 16, killed 8, survived 8, no coverage 0
+- NullReturnValsMutator: generated 84, killed 65, survived 2, no coverage 17
+- EmptyObjectReturnValsMutator: generated 36, killed 18, survived 1, no coverage 17
+- BooleanTrueReturnValsMutator: generated 17, killed 7, survived 5, no coverage 5
+- BooleanFalseReturnValsMutator: generated 11, killed 9, survived 0, no coverage 2
+
+Totals: generated 264, killed 180, survived 33, no coverage 46
+Line coverage (mutated classes): 431/478 (90%)
+Mutation score: 68%
