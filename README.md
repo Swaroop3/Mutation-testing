@@ -27,7 +27,7 @@
 
 ## Screenshots
 - Test summary: ![Test summary](docs/screenshots/test-summary.png)
-- PIT summary: ![PIT summary](docs/screenshots/pit-summary.png)
+- PIT summary: ![PIT summary](docs/screenshots/pit-summary-after.png)
 - PIT survivors: ![PIT survivors](docs/screenshots/pit-survivors.png)
 - Class diagram: ![Class diagram](docs/screenshots/class_diagram.png)
 - Checkout sequence: ![Checkout sequence](docs/screenshots/checkout_sequence.png)
