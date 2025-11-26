@@ -12,10 +12,26 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class FakePaymentGatewayTest {
 
     @Test
-    void returnsDeterministicOutcomes() {
+    void returnsAuthorizedWhenSeedIs0() {
+        FakePaymentGateway gateway = new FakePaymentGateway(0L);
+        Money amount = new Money(new BigDecimal("10.00"), Currency.getInstance("USD"));
+        PaymentResult result = gateway.authorize("order-1", amount);
+        assertEquals(PaymentStatus.AUTHORIZED, result.status());
+    }
+
+    @Test
+    void returnsDeclinedWhenSeedIs1() {
         FakePaymentGateway gateway = new FakePaymentGateway(1L);
         Money amount = new Money(new BigDecimal("10.00"), Currency.getInstance("USD"));
         PaymentResult result = gateway.authorize("order-1", amount);
-        assertTrue(result.status() == PaymentStatus.AUTHORIZED || result.status() == PaymentStatus.DECLINED || result.status() == PaymentStatus.ERROR);
+        assertEquals(PaymentStatus.DECLINED, result.status());
+    }
+
+    @Test
+    void returnsErrorWhenSeedIs13() {
+        FakePaymentGateway gateway = new FakePaymentGateway(13L);
+        Money amount = new Money(new BigDecimal("10.00"), Currency.getInstance("USD"));
+        PaymentResult result = gateway.authorize("order-1", amount);
+        assertEquals(PaymentStatus.ERROR, result.status());
     }
 }

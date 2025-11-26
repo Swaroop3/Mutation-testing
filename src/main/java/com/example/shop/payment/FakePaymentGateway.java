@@ -1,6 +1,8 @@
 package com.example.shop.payment;
 
 import com.example.shop.util.Money;
+import java.math.BigDecimal;
+import java.util.Currency;
 import java.util.Random;
 
 public class FakePaymentGateway implements PaymentGateway {
