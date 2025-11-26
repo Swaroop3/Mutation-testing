@@ -45,7 +45,7 @@ This project uses a multi-layered testing strategy to ensure code quality, corre
 - **Focus:**
   - **Unit:** Validating the correctness of individual components, such as pricing math, promotion eligibility, and utility methods.
   - **Integration:** Ensuring that different components work together correctly in larger workflows, such as the complete checkout process.
-- **Status:** The project contains **49 passing unit and integration tests**.
+- **Status:** The project contains **53 passing unit and integration tests**.
 
 ### 2. Code Coverage (JaCoCo)
 - **Framework:** JaCoCo Maven Plugin.
