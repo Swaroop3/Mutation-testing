@@ -1,7 +1,7 @@
 # E-commerce Cart & Checkout (Software Testing)
 
 ## Summary
-This project showcases software testing methodologies applied to an e-commerce cart and checkout system. The testing strategy encompasses:
+This project showcases software testing methodologies applied to an e-commerce cart and checkout system. The testing strategy includes:
 - **Unit Testing:** Implemented with JUnit 5 for foundational code correctness.
 - **Code Coverage:** Measured using JaCoCo, providing detailed insights into instruction, branch, and method coverage. JaCoCo helps identify untested areas, **complementing fuzz testing** by showing where the fuzzer (and unit tests) reached.
 - **Fuzz Testing:** Conducted using Jazzer, testing the application   against unexpected inputs. Fuzz testing often discovers crashes in areas that unit tests or even high code coverage might miss, creating a powerful testing pair with JaCoCo.
@@ -138,5 +138,8 @@ The table below provides a detailed breakdown of the mutation testing results, s
    (Replace `<FuzzTestName>` with the full class name of the fuzz test, e.g., `com.example.shop.cart.CartServiceFuzzTest`. Each fuzz test will run for its default duration of approximately 5 minutes.)
 
 ## Contributions
-- Swaroop(IMT2022587): pricing/tax/shipping modules, promo engine, Money/utilities, unit tests for pricing/promos, diagrams, README/report.
-- Lokesh(IMT2022577): cart/checkout, inventory/payment/order modules, integration tests, PIT/JaCoCo/Jazzer setup, README/report.
+- Swaroop(IMT2022587): pricing/tax/shipping modules, promo engine, Money/utilities, unit tests for pricing/promos, diagrams, tests with PIT, README/report.
+- Lokesh(IMT2022577): cart/checkout, inventory/payment/order modules, integration tests, tests with PIT/JaCoCo/Jazzer, README/report.
+
+## AI Usage
+We have used Gemini to write parts of source code, configuration files(pox.xml), to write reports(this file too).
