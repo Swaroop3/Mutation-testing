@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CartService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">shop</a> &gt; <a href="index.source.html" class="el_package">com.example.shop.cart</a> &gt; <span class="el_source">CartService.java</span></div><h1>CartService.java</h1><pre class="source lang-java linenums">package com.example.shop.cart;
+
+import com.example.shop.catalog.InventoryService;
+import com.example.shop.catalog.Product;
+import com.example.shop.pricing.PriceBreakdown;
+import com.example.shop.pricing.PriceCalculator;
+import com.example.shop.util.Money;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+
+public class CartService {
+    private final InventoryService inventory;
+    private final PriceCalculator priceCalculator;
+    private final Map&lt;String, Product&gt; catalog;
+<span class="fc" id="L18">    private final Map&lt;String, List&lt;CartLine&gt;&gt; carts = new HashMap&lt;&gt;();</span>
+    private final int maxLines;
+    private final int maxQtyPerItem;
+
+<span class="fc" id="L22">    public CartService(InventoryService inventory, PriceCalculator priceCalculator, Map&lt;String, Product&gt; catalog, int maxLines, int maxQtyPerItem) {</span>
+<span class="fc" id="L23">        this.inventory = Objects.requireNonNull(inventory, &quot;inventory&quot;);</span>
+<span class="fc" id="L24">        this.priceCalculator = Objects.requireNonNull(priceCalculator, &quot;priceCalculator&quot;);</span>
+<span class="fc" id="L25">        this.catalog = Objects.requireNonNull(catalog, &quot;catalog&quot;);</span>
+<span class="fc" id="L26">        this.maxLines = maxLines;</span>
+<span class="fc" id="L27">        this.maxQtyPerItem = maxQtyPerItem;</span>
+<span class="fc" id="L28">    }</span>
+
+    public synchronized Cart addItem(String cartId, String productId, int qty) {
+<span class="fc" id="L31">        validateQty(qty);</span>
+<span class="fc" id="L32">        Product product = requireProduct(productId);</span>
+<span class="fc" id="L33">        int available = inventory.available(productId);</span>
+<span class="pc bpc" id="L34" title="1 of 2 branches missed.">        if (available &lt; qty) {</span>
+<span class="nc" id="L35">            throw new IllegalStateException(&quot;Insufficient stock for &quot; + productId);</span>
+        }
+<span class="fc" id="L37">        List&lt;CartLine&gt; lines = carts.computeIfAbsent(cartId, id -&gt; new ArrayList&lt;&gt;());</span>
+<span class="fc bfc" id="L38" title="All 2 branches covered.">        if (lines.size() &gt;= maxLines) {</span>
+<span class="fc" id="L39">            throw new IllegalStateException(&quot;Cart line limit reached&quot;);</span>
+        }
+<span class="fc" id="L41">        lines.add(new CartLine(productId, qty, product.price(), Money.zero(product.price().currency())));</span>
+<span class="fc" id="L42">        return recompute(cartId);</span>
+    }
+
+    public synchronized Cart updateQty(String cartId, String productId, int qty) {
+<span class="fc" id="L46">        validateQty(qty);</span>
+<span class="fc" id="L47">        Product product = requireProduct(productId);</span>
+<span class="fc" id="L48">        List&lt;CartLine&gt; lines = carts.get(cartId);</span>
+<span class="fc bfc" id="L49" title="All 2 branches covered.">        if (lines == null) {</span>
+<span class="fc" id="L50">            throw new IllegalStateException(&quot;Cart not found&quot;);</span>
+        }
+<span class="fc" id="L52">        boolean updated = false;</span>
+<span class="fc bfc" id="L53" title="All 2 branches covered.">        for (int i = 0; i &lt; lines.size(); i++) {</span>
+<span class="fc" id="L54">            CartLine line = lines.get(i);</span>
+<span class="pc bpc" id="L55" title="1 of 2 branches missed.">            if (line.productId().equals(productId)) {</span>
+<span class="pc bpc" id="L56" title="1 of 2 branches missed.">                if (qty &gt; maxQtyPerItem) {</span>
+<span class="nc" id="L57">                    throw new IllegalArgumentException(&quot;Exceeds per-item limit&quot;);</span>
+                }
+<span class="fc bfc" id="L59" title="All 2 branches covered.">                if (inventory.available(productId) &lt; qty) {</span>
+<span class="fc" id="L60">                    throw new IllegalStateException(&quot;Insufficient stock for &quot; + productId);</span>
+                }
+<span class="fc" id="L62">                lines.set(i, new CartLine(productId, qty, product.price(), line.discount()));</span>
+<span class="fc" id="L63">                updated = true;</span>
+            }
+        }
+<span class="pc bpc" id="L66" title="1 of 2 branches missed.">        if (!updated) {</span>
+<span class="nc" id="L67">            throw new IllegalStateException(&quot;Item not in cart&quot;);</span>
+        }
+<span class="fc" id="L69">        return recompute(cartId);</span>
+    }
+
+    public synchronized Cart removeItem(String cartId, String productId) {
+<span class="fc" id="L73">        List&lt;CartLine&gt; lines = carts.get(cartId);</span>
+<span class="pc bpc" id="L74" title="1 of 2 branches missed.">        if (lines == null) {</span>
+<span class="nc" id="L75">            throw new IllegalStateException(&quot;Cart not found&quot;);</span>
+        }
+<span class="fc" id="L77">        lines.removeIf(line -&gt; line.productId().equals(productId));</span>
+<span class="fc" id="L78">        return recompute(cartId);</span>
+    }
+
+    public synchronized Cart getCart(String cartId) {
+<span class="fc" id="L82">        return recompute(cartId);</span>
+    }
+
+    private Cart recompute(String cartId) {
+<span class="fc" id="L86">        List&lt;CartLine&gt; lines = carts.getOrDefault(cartId, new ArrayList&lt;&gt;());</span>
+<span class="fc" id="L87">        PriceBreakdown breakdown = priceCalculator.price(lines);</span>
+<span class="fc" id="L88">        return new Cart(cartId, breakdown.lines(), breakdown.subtotal(), breakdown.discounts(), breakdown.taxes(), breakdown.shipping(), breakdown.total());</span>
+    }
+
+    private void validateQty(int qty) {
+<span class="fc bfc" id="L92" title="All 2 branches covered.">        if (qty &lt;= 0) {</span>
+<span class="fc" id="L93">            throw new IllegalArgumentException(&quot;quantity must be positive&quot;);</span>
+        }
+<span class="fc bfc" id="L95" title="All 2 branches covered.">        if (qty &gt; maxQtyPerItem) {</span>
+<span class="fc" id="L96">            throw new IllegalArgumentException(&quot;Exceeds per-item limit&quot;);</span>
+        }
+<span class="fc" id="L98">    }</span>
+
+    private Product requireProduct(String productId) {
+<span class="fc" id="L101">        Product product = catalog.get(productId);</span>
+<span class="fc bfc" id="L102" title="All 2 branches covered.">        if (product == null) {</span>
+<span class="fc" id="L103">            throw new IllegalArgumentException(&quot;Unknown product &quot; + productId);</span>
+        }
+<span class="fc" id="L105">        return product;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

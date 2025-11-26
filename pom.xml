@@ -32,6 +32,12 @@
             <version>${junit.version}</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>com.code-intelligence</groupId>
+            <artifactId>jazzer-junit</artifactId>
+            <version>0.26.0</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>
@@ -43,6 +49,43 @@
                 <configuration>
                     <useModulePath>false</useModulePath>
                 </configuration>
+                <executions>
+                    <execution>
+                        <id>default-test</id>
+                        <goals>
+                            <goal>test</goal>
+                        </goals>
+                        <configuration>
+                            <excludes>
+                                <exclude>**/*FuzzTest.java</exclude>
+                            </excludes>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>fuzz-test</id>
+                        <goals>
+                            <goal>test</goal>
+                        </goals>
+                        <configuration>
+                            <includes>
+                                <include>**/CartServiceFuzzTest.java</include>
+                                <include>**/CartServiceUpdateQtyFuzzTest.java</include>
+                                <include>**/CartServiceRemoveItemFuzzTest.java</include>
+                                <include>**/CheckoutServiceFuzzTest.java</include>
+                                <include>**/PromoEngineFuzzTest.java</include>
+                                <include>**/InventoryServiceFuzzTest.java</include>
+                                <include>**/PricingFuzzTest.java</include>
+                                <include>**/DataObjectFuzzTest.java</include>
+                                <include>**/OrderRepositoryFuzzTest.java</include>
+                            </includes>
+                            <environmentVariables>
+                                <JAZZER_FUZZ>1</JAZZER_FUZZ>
+                            </environmentVariables>
+                            <jazzer.duration>10s</jazzer.duration>
+                            <skip>${skipFuzzing}</skip>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
             <plugin>
                 <groupId>org.pitest</groupId>
@@ -70,6 +113,25 @@
                         <version>1.2.1</version>
                     </dependency>
                 </dependencies>
+            </plugin>
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>0.8.11</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>report</id>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>

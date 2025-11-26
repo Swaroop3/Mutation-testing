@@ -122,4 +122,43 @@ class PromoEngineTest {
         PromotionOutcome outcome = engine.apply(List.of(line), "standard", "u1");
         assertEquals(BigDecimal.ZERO.setScale(2), outcome.discount().raw());
     }
+
+    @Test
+    void testApplyWithEmptyCart() {
+        PromoEngine engine = new PromoEngine(List.of(), new FixedClock(Instant.parse("2025-01-01T00:00:00Z"), ZoneId.of("UTC")), Map.of(), new CouponValidator(), usd);
+        PromotionOutcome outcome = engine.apply(List.of(), "standard", "u1");
+        assertEquals(BigDecimal.ZERO.setScale(2), outcome.discount().raw());
+    }
+
+    @Test
+    void testBogoWithInsufficientQuantity() {
+        Product prod = new Product("a", "A", "catA", new Money(new BigDecimal("10.00"), usd), TaxCode.STANDARD, false, false);
+        CartLine line = new CartLine(prod.id(), 1, prod.price(), Money.zero(usd));
+        Promotion bogo = Promotion.builder("BOGO", PromotionType.BOGO).category("catA").build();
+        PromoEngine engine = new PromoEngine(List.of(bogo), new FixedClock(Instant.parse("2025-01-01T00:00:00Z"), ZoneId.of("UTC")), Map.of(prod.id(), prod), new CouponValidator(), usd);
+
+        PromotionOutcome outcome = engine.apply(List.of(line), "standard", "u1");
+        assertEquals(BigDecimal.ZERO.setScale(2), outcome.discount().raw());
+    }
+
+    @Test
+    void testCategoryPercentWithNoMatchingItems() {
+        Product prod = new Product("a", "A", "catA", new Money(new BigDecimal("10.00"), usd), TaxCode.STANDARD, false, false);
+        CartLine line = new CartLine(prod.id(), 1, prod.price(), Money.zero(usd));
+        Promotion category = Promotion.builder("CAT20", PromotionType.CATEGORY_PERCENTAGE).category("catB").percent(new BigDecimal("0.20")).build();
+        PromoEngine engine = new PromoEngine(List.of(category), new FixedClock(Instant.parse("2025-01-01T00:00:00Z"), ZoneId.of("UTC")), Map.of(prod.id(), prod), new CouponValidator(), usd);
+
+        PromotionOutcome outcome = engine.apply(List.of(line), "standard", "u1");
+        assertEquals(BigDecimal.ZERO.setScale(2), outcome.discount().raw());
+    }
+
+    @Test
+    void testApplyWithProductNotInCatalog() {
+        CartLine line = new CartLine("sku-not-in-catalog", 1, new Money(new BigDecimal("10.00"), usd), Money.zero(usd));
+        Promotion bogo = Promotion.builder("BOGO", PromotionType.BOGO).category("catA").build();
+        PromoEngine engine = new PromoEngine(List.of(bogo), new FixedClock(Instant.parse("2025-01-01T00:00:00Z"), ZoneId.of("UTC")), Map.of(), new CouponValidator(), usd);
+
+        PromotionOutcome outcome = engine.apply(List.of(line), "standard", "u1");
+        assertEquals(BigDecimal.ZERO.setScale(2), outcome.discount().raw());
+    }
 }

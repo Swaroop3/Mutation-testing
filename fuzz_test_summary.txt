@@ -1,0 +1,134 @@
+Fuzz Testing Execution Summary
+=============================
+
+This file documents the results of individual fuzz testing runs executed on the project's critical components. Each test was run for its default duration (approximately 5 minutes).
+
+---
+
+**1. CartServiceFuzzTest (Targeting `CartService.addItem`)**
+*   Method Targeted: `CartService.addItem`
+*   Observed Duration: 301 seconds (approx. 5 minutes)
+*   Total Executions: 45,157,711 runs
+*   Outcome: No crashes or errors found.
+
+---
+
+**2. CartServiceUpdateQtyFuzzTest (Targeting `CartService.updateQty`)**
+*   Method Targeted: `CartService.updateQty`
+*   Observed Duration: 301 seconds (approx. 5 minutes)
+*   Total Executions: 30,590,711 runs
+*   Outcome: No crashes or errors found.
+
+---
+
+**3. CartServiceRemoveItemFuzzTest (Targeting `CartService.removeItem`)**
+*   Method Targeted: `CartService.removeItem`
+*   Observed Duration: 301 seconds (approx. 5 minutes)
+*   Total Executions: 70,517,508 runs
+*   Outcome: No crashes or errors found.
+
+---
+
+**4. CheckoutServiceFuzzTest (Targeting `CheckoutService.checkout`)**
+*   Method Targeted: `CheckoutService.checkout`
+*   Observed Duration: 301 seconds (approx. 5 minutes)
+*   Total Executions: 50,398,119 runs
+*   Outcome: No crashes or errors found.
+
+---
+
+**5. PromoEngineFuzzTest (Targeting `PromoEngine.apply`)**
+*   Method Targeted: `PromoEngine.apply`
+*   Observed Duration: 301 seconds (approx. 5 minutes)
+*   Total Executions: 140,112,302 runs
+*   Outcome: No crashes or errors found.
+
+---
+
+**6. InventoryServiceFuzzTest (Targeting `InventoryService` methods)**
+*   Method Targeted: `InventoryService` (e.g., `upsertStock`, `reserve`, `commit`, `release`, `available`)
+*   Observed Duration: 301 seconds (approx. 5 minutes)
+*   Total Executions: 105,852,984 runs
+*   Outcome: No crashes or errors found.
+
+---
+
+**7. PricingFuzzTest (Targeting `PriceCalculator.price`)**
+*   **Initial Run:**
+    *   Observed Duration: 0 seconds (Crashed)
+    *   Total Executions: 3,415 runs
+    *   Outcome: **CRASH FOUND!** - `java.lang.NumberFormatException`
+    *   Details: The fuzzer generated a `Double.NaN` (Not a Number) value, which the `BigDecimal.valueOf()` constructor cannot handle. A crash file was generated at `crash-19a4c0b566674ebf00873ef618a9a241f97cf343`.
+*   **Run After Fix:**
+    *   Details: The code was updated in `PricingFuzzTest.java` to handle non-finite `double` values before creating a `BigDecimal`.
+    *   Observed Duration: 301 seconds (approx. 5 minutes)
+    *   Total Executions: 35,551,161 runs
+    *   Outcome: No crashes or errors found.
+
+---
+
+**8. PricingFuzzTest (Targeting `TaxCalculator.taxFor`)**
+*   **Initial Run:**
+    *   Observed Duration: 0 seconds (Crashed)
+    *   Total Executions: 23 runs
+    *   Outcome: **CRASH FOUND!** - `java.lang.NumberFormatException`
+    *   Details: The fuzzer generated an `Infinity` or `NaN` `double` value when constructing `TaxCalculator` parameters, which `BigDecimal` cannot handle. A crash file was generated at `crash-c4ea21bb365bbeeaf5f2c654883e56d11e43c44e`.
+*   **Run After Fix:**
+    *   Details: The code was updated in `PricingFuzzTest.java` to handle non-finite `double` values before creating a `BigDecimal`.
+    *   Observed Duration: 301 seconds (approx. 5 minutes)
+    *   Total Executions: 114,273,766 runs
+    *   Outcome: No crashes or errors found.
+
+---
+
+**9. PricingFuzzTest (Targeting `ShippingCalculator.shippingFor`)**
+*   **Initial Run:**
+    *   Observed Duration: 0 seconds (Crashed)
+    *   Total Executions: 10 runs
+    *   Outcome: **CRASH FOUND!** - `java.lang.NumberFormatException`
+    *   Details: The fuzzer generated an `Infinity` or `NaN` `double` value when constructing `Money` parameters for `ShippingCalculator`, which `BigDecimal` cannot handle. A crash file was generated at `crash-c4ea21bb365bbeeaf5f2c654883e56d11e43c44e`.
+*   **Run After Fix:**
+    *   Details: The code was updated in `PricingFuzzTest.java` to handle non-finite `double` values before creating a `BigDecimal`.
+    *   Observed Duration: 301 seconds (approx. 5 minutes)
+    *   Total Executions: 81,176,705 runs
+    *   Outcome: No crashes or errors found.
+
+---
+
+**10. DataObjectFuzzTest (Targeting `User` constructor)**
+*   Method Targeted: `User` constructor
+*   Observed Duration: 301 seconds (approx. 5 minutes)
+*   Total Executions: 392,468,547 runs
+*   Outcome: No crashes or errors found.
+
+---
+
+**11. DataObjectFuzzTest (Targeting `Address` constructor)**
+*   Method Targeted: `Address` constructor
+*   Observed Duration: 301 seconds (approx. 5 minutes)
+*   Total Executions: 285,707,497 runs
+*   Outcome: No crashes or errors found.
+
+---
+
+**12. DataObjectFuzzTest (Targeting `Money` constructor)**
+*   Method Targeted: `Money` constructor
+*   Observed Duration: 301 seconds (approx. 5 minutes)
+*   Total Executions: 142,233,104 runs
+*   Outcome: No crashes or errors found.
+
+---
+
+**13. OrderRepositoryFuzzTest (Targeting `OrderRepository.save`)**
+*   **Initial Run:**
+    *   Observed Duration: 0 seconds (Crashed)
+    *   Total Executions: 2,167 runs
+    *   Outcome: **CRASH FOUND!** - `java.lang.NumberFormatException`
+    *   Details: The fuzzer generated an `Infinity` or `NaN` `double` value when constructing `Money` parameters for `CartLine` objects within the `Order`, which `BigDecimal` cannot handle. A crash file was generated at `crash-ddf70bb8c351e45d9cd78b1cb458b0fef15a3418`.
+*   **Run After Fix:**
+    *   Details: The code was updated in `OrderRepositoryFuzzTest.java` to handle non-finite `double` values before creating a `BigDecimal`.
+    *   Observed Duration: 301 seconds (approx. 5 minutes)
+    *   Total Executions: 82,113,781 runs
+    *   Outcome: No crashes or errors found.
+
+---

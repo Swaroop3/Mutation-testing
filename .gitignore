@@ -1,0 +1,6 @@
+*.pdf
+
+.cifuzz-corpus/
+.cifuzz-build/
+.cifuzz-out/
+crash*

@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CheckoutService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">shop</a> &gt; <a href="index.source.html" class="el_package">com.example.shop.checkout</a> &gt; <span class="el_source">CheckoutService.java</span></div><h1>CheckoutService.java</h1><pre class="source lang-java linenums">package com.example.shop.checkout;
+
+import com.example.shop.cart.Cart;
+import com.example.shop.cart.CartService;
+import com.example.shop.catalog.InventoryService;
+import com.example.shop.catalog.Product;
+import com.example.shop.order.Order;
+import com.example.shop.order.OrderRepository;
+import com.example.shop.payment.PaymentGateway;
+import com.example.shop.payment.PaymentResult;
+import com.example.shop.payment.PaymentStatus;
+import com.example.shop.util.IdGenerator;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+
+public class CheckoutService {
+    private final CartService cartService;
+    private final InventoryService inventory;
+    private final PaymentGateway paymentGateway;
+    private final OrderRepository orderRepository;
+    private final IdGenerator idGenerator;
+    private final Map&lt;String, Product&gt; catalog;
+
+<span class="fc" id="L25">    public CheckoutService(CartService cartService, InventoryService inventory, PaymentGateway paymentGateway, OrderRepository orderRepository, IdGenerator idGenerator, Map&lt;String, Product&gt; catalog) {</span>
+<span class="fc" id="L26">        this.cartService = Objects.requireNonNull(cartService, &quot;cartService&quot;);</span>
+<span class="fc" id="L27">        this.inventory = Objects.requireNonNull(inventory, &quot;inventory&quot;);</span>
+<span class="fc" id="L28">        this.paymentGateway = Objects.requireNonNull(paymentGateway, &quot;paymentGateway&quot;);</span>
+<span class="fc" id="L29">        this.orderRepository = Objects.requireNonNull(orderRepository, &quot;orderRepository&quot;);</span>
+<span class="fc" id="L30">        this.idGenerator = Objects.requireNonNull(idGenerator, &quot;idGenerator&quot;);</span>
+<span class="fc" id="L31">        this.catalog = Objects.requireNonNull(catalog, &quot;catalog&quot;);</span>
+<span class="fc" id="L32">    }</span>
+
+    public CheckoutResult checkout(CheckoutRequest request) {
+<span class="fc" id="L35">        Cart cart = cartService.getCart(request.cartId());</span>
+<span class="fc" id="L36">        reserveInventory(cart);</span>
+<span class="fc" id="L37">        PaymentResult payment = paymentGateway.authorize(request.cartId(), cart.total());</span>
+<span class="fc bfc" id="L38" title="All 2 branches covered.">        if (payment.status() != PaymentStatus.AUTHORIZED) {</span>
+<span class="fc" id="L39">            releaseInventory(cart);</span>
+<span class="fc" id="L40">            return new CheckoutResult(toOrder(cart, List.of()), payment);</span>
+        }
+<span class="fc" id="L42">        commitInventory(cart);</span>
+<span class="fc" id="L43">        Order order = toOrder(cart, List.of());</span>
+<span class="fc" id="L44">        orderRepository.save(order);</span>
+<span class="fc" id="L45">        return new CheckoutResult(order, payment);</span>
+    }
+
+    private void reserveInventory(Cart cart) {
+<span class="fc" id="L49">        cart.lines().forEach(line -&gt; {</span>
+<span class="fc" id="L50">            boolean reserved = inventory.reserve(line.productId(), line.quantity());</span>
+<span class="fc bfc" id="L51" title="All 2 branches covered.">            if (!reserved) {</span>
+<span class="fc" id="L52">                throw new IllegalStateException(&quot;Unable to reserve &quot; + line.productId());</span>
+            }
+<span class="fc" id="L54">        });</span>
+<span class="fc" id="L55">    }</span>
+
+    private void commitInventory(Cart cart) {
+<span class="fc" id="L58">        cart.lines().forEach(line -&gt; inventory.commit(line.productId(), line.quantity()));</span>
+<span class="fc" id="L59">    }</span>
+
+    private void releaseInventory(Cart cart) {
+<span class="fc" id="L62">        cart.lines().forEach(line -&gt; inventory.release(line.productId(), line.quantity()));</span>
+<span class="fc" id="L63">    }</span>
+
+    private Order toOrder(Cart cart, List&lt;String&gt; promotions) {
+<span class="fc" id="L66">        return new Order(idGenerator.nextId(), cart.lines(), cart.total(), cart.taxes(), cart.shipping(), promotions);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

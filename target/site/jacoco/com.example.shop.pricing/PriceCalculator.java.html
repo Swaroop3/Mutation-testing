@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PriceCalculator.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">shop</a> &gt; <a href="index.source.html" class="el_package">com.example.shop.pricing</a> &gt; <span class="el_source">PriceCalculator.java</span></div><h1>PriceCalculator.java</h1><pre class="source lang-java linenums">package com.example.shop.pricing;
+
+import com.example.shop.cart.CartLine;
+import com.example.shop.catalog.Product;
+import com.example.shop.promo.PromoEngine;
+import com.example.shop.promo.PromotionOutcome;
+import com.example.shop.util.Money;
+import java.util.ArrayList;
+import java.util.Currency;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+
+public class PriceCalculator {
+    private final TaxCalculator taxCalculator;
+    private final ShippingCalculator shippingCalculator;
+    private final PromoEngine promoEngine;
+    private final Map&lt;String, String&gt; userTiers; // userId -&gt; tier
+    private final Map&lt;String, Product&gt; catalog;
+    private final Currency baseCurrency;
+
+<span class="fc" id="L22">    public PriceCalculator(TaxCalculator taxCalculator, ShippingCalculator shippingCalculator, PromoEngine promoEngine, Map&lt;String, String&gt; userTiers, Map&lt;String, Product&gt; catalog, Currency baseCurrency) {</span>
+<span class="fc" id="L23">        this.taxCalculator = Objects.requireNonNull(taxCalculator, &quot;taxCalculator&quot;);</span>
+<span class="fc" id="L24">        this.shippingCalculator = Objects.requireNonNull(shippingCalculator, &quot;shippingCalculator&quot;);</span>
+<span class="fc" id="L25">        this.promoEngine = Objects.requireNonNull(promoEngine, &quot;promoEngine&quot;);</span>
+<span class="fc" id="L26">        this.userTiers = Objects.requireNonNull(userTiers, &quot;userTiers&quot;);</span>
+<span class="fc" id="L27">        this.catalog = Objects.requireNonNull(catalog, &quot;catalog&quot;);</span>
+<span class="fc" id="L28">        this.baseCurrency = Objects.requireNonNull(baseCurrency, &quot;baseCurrency&quot;);</span>
+<span class="fc" id="L29">    }</span>
+
+    public PriceBreakdown price(List&lt;CartLine&gt; lines) {
+<span class="fc bfc" id="L32" title="All 2 branches covered.">        if (lines.isEmpty()) {</span>
+<span class="fc" id="L33">            Money zero = Money.zero(baseCurrency);</span>
+<span class="fc" id="L34">            return new PriceBreakdown(new ArrayList&lt;&gt;(), zero, zero, zero, zero, zero);</span>
+        }
+<span class="fc" id="L36">        Money zero = Money.zero(lines.get(0).unitPrice().currency());</span>
+<span class="fc" id="L37">        Money subtotal = zero;</span>
+<span class="fc bfc" id="L38" title="All 2 branches covered.">        for (CartLine line : lines) {</span>
+<span class="fc" id="L39">            subtotal = subtotal.add(line.subtotal());</span>
+<span class="fc" id="L40">        }</span>
+<span class="fc" id="L41">        String userId = &quot;anonymous&quot;;</span>
+<span class="fc" id="L42">        String tier = userTiers.getOrDefault(userId, &quot;standard&quot;);</span>
+<span class="fc" id="L43">        PromotionOutcome outcome = promoEngine.apply(lines, tier, userId);</span>
+<span class="fc" id="L44">        Money discountedSubtotal = subtotal.subtract(outcome.discount());</span>
+
+<span class="fc" id="L46">        Money taxes = zero;</span>
+<span class="fc bfc" id="L47" title="All 2 branches covered.">        for (CartLine line : lines) {</span>
+<span class="fc" id="L48">            Money lineTax = taxCalculator.taxFor(productFor(line), line.subtotal(), line.discount());</span>
+<span class="fc" id="L49">            taxes = taxes.add(lineTax);</span>
+<span class="fc" id="L50">        }</span>
+
+<span class="fc bfc" id="L52" title="All 2 branches covered.">        Money shipping = outcome.freeShipping() ? zero : shippingCalculator.shippingFor(lines, discountedSubtotal);</span>
+<span class="fc" id="L53">        Money total = discountedSubtotal.add(taxes).add(shipping);</span>
+<span class="fc" id="L54">        List&lt;CartLine&gt; newLines = new ArrayList&lt;&gt;(lines);</span>
+<span class="fc" id="L55">        return new PriceBreakdown(newLines, subtotal, outcome.discount(), taxes, shipping, total);</span>
+    }
+
+    private Product productFor(CartLine line) {
+<span class="fc" id="L59">        Product product = catalog.get(line.productId());</span>
+<span class="pc bpc" id="L60" title="1 of 2 branches missed.">        if (product == null) {</span>
+<span class="nc" id="L61">            throw new IllegalStateException(&quot;Missing product for line &quot; + line.productId());</span>
+        }
+<span class="fc" id="L63">        return product;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PromoEngine.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">shop</a> &gt; <a href="index.source.html" class="el_package">com.example.shop.promo</a> &gt; <span class="el_source">PromoEngine.java</span></div><h1>PromoEngine.java</h1><pre class="source lang-java linenums">package com.example.shop.promo;
+
+import com.example.shop.cart.CartLine;
+import com.example.shop.catalog.Product;
+import com.example.shop.util.Clock;
+import com.example.shop.util.Money;
+import java.math.BigDecimal;
+import java.time.Instant;
+import java.util.ArrayList;
+import java.util.Currency;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+public class PromoEngine {
+    private final List&lt;Promotion&gt; promotions;
+    private final Clock clock;
+    private final Map&lt;String, Product&gt; catalog;
+    private final CouponValidator couponValidator;
+    private final Currency baseCurrency;
+
+<span class="fc" id="L24">    public PromoEngine(List&lt;Promotion&gt; promotions, Clock clock, Map&lt;String, Product&gt; catalog, CouponValidator couponValidator, Currency baseCurrency) {</span>
+<span class="fc" id="L25">        this.promotions = List.copyOf(promotions);</span>
+<span class="fc" id="L26">        this.clock = Objects.requireNonNull(clock, &quot;clock&quot;);</span>
+<span class="fc" id="L27">        this.catalog = Objects.requireNonNull(catalog, &quot;catalog&quot;);</span>
+<span class="fc" id="L28">        this.couponValidator = Objects.requireNonNull(couponValidator, &quot;couponValidator&quot;);</span>
+<span class="fc" id="L29">        this.baseCurrency = Objects.requireNonNull(baseCurrency, &quot;baseCurrency&quot;);</span>
+<span class="fc" id="L30">    }</span>
+
+    public PromotionOutcome apply(List&lt;CartLine&gt; lines, String userTier, String userId) {
+<span class="fc" id="L33">        Instant now = clock.now();</span>
+<span class="fc bfc" id="L34" title="All 2 branches covered.">        Money currencyZero = lines.isEmpty() ? Money.zero(baseCurrency) : Money.zero(lines.get(0).unitPrice().currency());</span>
+<span class="fc" id="L35">        Money totalDiscount = currencyZero;</span>
+<span class="fc" id="L36">        boolean freeShipping = false;</span>
+<span class="fc" id="L37">        List&lt;String&gt; applied = new ArrayList&lt;&gt;();</span>
+
+<span class="fc bfc" id="L39" title="All 2 branches covered.">        for (Promotion promo : promotions) {</span>
+<span class="fc bfc" id="L40" title="All 2 branches covered.">            if (!promo.isActive(now)) continue;</span>
+<span class="pc bpc" id="L41" title="1 of 4 branches missed.">            if (!promo.tiersAllowed().isEmpty() &amp;&amp; !promo.tiersAllowed().contains(userTier)) {</span>
+<span class="fc" id="L42">                continue;</span>
+            }
+<span class="fc bfc" id="L44" title="All 2 branches covered.">            if (!couponValidator.canUse(userId, promo)) {</span>
+<span class="fc" id="L45">                continue;</span>
+            }
+<span class="fc" id="L47">            Money discount = evaluatePromo(promo, lines);</span>
+<span class="pc bpc" id="L48" title="1 of 4 branches missed.">            boolean appliedNow = discount != null &amp;&amp; discount.raw().compareTo(BigDecimal.ZERO) &gt; 0;</span>
+<span class="fc bfc" id="L49" title="All 2 branches covered.">            if (promo.type() == PromotionType.FREE_SHIPPING) {</span>
+<span class="fc" id="L50">                freeShipping = true;</span>
+<span class="fc" id="L51">                appliedNow = true;</span>
+            }
+<span class="fc bfc" id="L53" title="All 2 branches covered.">            if (appliedNow) {</span>
+<span class="fc" id="L54">                applied.add(promo.code());</span>
+<span class="pc bpc" id="L55" title="1 of 2 branches missed.">                if (discount != null) {</span>
+<span class="fc" id="L56">                    totalDiscount = totalDiscount.add(discount);</span>
+                }
+<span class="fc" id="L58">                couponValidator.recordUse(userId, promo);</span>
+<span class="fc bfc" id="L59" title="All 2 branches covered.">                if (!promo.combinable()) {</span>
+<span class="fc" id="L60">                    break;</span>
+                }
+            }
+<span class="fc" id="L63">        }</span>
+<span class="fc" id="L64">        return new PromotionOutcome(totalDiscount, freeShipping, applied);</span>
+    }
+
+    private Money evaluatePromo(Promotion promo, List&lt;CartLine&gt; lines) {
+<span class="pc bpc" id="L68" title="1 of 6 branches missed.">        switch (promo.type()) {</span>
+            case PERCENTAGE:
+<span class="fc" id="L70">                return percentOff(lines, promo.percent().orElse(BigDecimal.ZERO));</span>
+            case FIXED_AMOUNT:
+<span class="pc" id="L72">                return promo.amount().orElseThrow(() -&gt; new IllegalStateException(&quot;Fixed promo missing amount&quot;));</span>
+            case BOGO:
+<span class="fc" id="L74">                return bogo(lines, promo.category().orElse(&quot;&quot;));</span>
+            case CATEGORY_PERCENTAGE:
+<span class="fc" id="L76">                return categoryPercent(lines, promo.category().orElse(&quot;&quot;), promo.percent().orElse(BigDecimal.ZERO));</span>
+            case FREE_SHIPPING:
+<span class="fc" id="L78">                return Money.zero(lines.get(0).unitPrice().currency());</span>
+            default:
+<span class="nc" id="L80">                return Money.zero(lines.get(0).unitPrice().currency());</span>
+        }
+    }
+
+    private Money percentOff(List&lt;CartLine&gt; lines, BigDecimal percent) {
+<span class="fc bfc" id="L85" title="All 2 branches covered.">        if (percent.compareTo(BigDecimal.ZERO) &lt;= 0) {</span>
+<span class="fc" id="L86">            return Money.zero(lines.get(0).unitPrice().currency());</span>
+        }
+<span class="fc" id="L88">        Money subtotal = lines.stream()</span>
+<span class="fc" id="L89">                .map(CartLine::subtotal)</span>
+<span class="fc" id="L90">                .reduce(Money.zero(lines.get(0).unitPrice().currency()), Money::add);</span>
+<span class="fc" id="L91">        return subtotal.multiply(percent);</span>
+    }
+
+    private Money categoryPercent(List&lt;CartLine&gt; lines, String category, BigDecimal percent) {
+<span class="fc" id="L95">        Money zero = Money.zero(lines.get(0).unitPrice().currency());</span>
+<span class="pc bpc" id="L96" title="2 of 4 branches missed.">        if (category.isBlank() || percent.compareTo(BigDecimal.ZERO) &lt;= 0) return zero;</span>
+<span class="fc" id="L97">        List&lt;CartLine&gt; eligible = lines.stream()</span>
+<span class="fc" id="L98">                .filter(line -&gt; category.equalsIgnoreCase(productCategory(line)))</span>
+<span class="fc" id="L99">                .collect(Collectors.toList());</span>
+<span class="fc" id="L100">        Money subtotal = eligible.stream().map(CartLine::subtotal).reduce(zero, Money::add);</span>
+<span class="fc" id="L101">        return subtotal.multiply(percent);</span>
+    }
+
+    private Money bogo(List&lt;CartLine&gt; lines, String category) {
+<span class="fc" id="L105">        Money zero = Money.zero(lines.get(0).unitPrice().currency());</span>
+<span class="fc" id="L106">        int totalEligible = lines.stream()</span>
+<span class="pc bpc" id="L107" title="1 of 4 branches missed.">                .filter(line -&gt; category.isBlank() || category.equalsIgnoreCase(productCategory(line)))</span>
+<span class="fc" id="L108">                .mapToInt(CartLine::quantity)</span>
+<span class="fc" id="L109">                .sum();</span>
+<span class="fc bfc" id="L110" title="All 2 branches covered.">        if (totalEligible &lt; 2) return zero;</span>
+<span class="fc" id="L111">        int freeItems = totalEligible / 2;</span>
+<span class="fc" id="L112">        BigDecimal unitPrice = lines.stream()</span>
+<span class="pc bpc" id="L113" title="1 of 4 branches missed.">                .filter(line -&gt; category.isBlank() || category.equalsIgnoreCase(productCategory(line)))</span>
+<span class="fc" id="L114">                .map(line -&gt; line.unitPrice().raw())</span>
+<span class="fc" id="L115">                .min(BigDecimal::compareTo)</span>
+<span class="fc" id="L116">                .orElse(BigDecimal.ZERO);</span>
+<span class="fc" id="L117">        return new Money(unitPrice.multiply(BigDecimal.valueOf(freeItems)), lines.get(0).unitPrice().currency());</span>
+    }
+
+    private String productCategory(CartLine line) {
+<span class="fc" id="L121">        Product product = catalog.get(line.productId());</span>
+<span class="fc bfc" id="L122" title="All 2 branches covered.">        return product == null ? &quot;&quot; : product.category();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

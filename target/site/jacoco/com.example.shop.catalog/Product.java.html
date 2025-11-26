@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Product.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">shop</a> &gt; <a href="index.source.html" class="el_package">com.example.shop.catalog</a> &gt; <span class="el_source">Product.java</span></div><h1>Product.java</h1><pre class="source lang-java linenums">package com.example.shop.catalog;
+
+import com.example.shop.util.Money;
+import java.util.Objects;
+
+public final class Product {
+    private final String id;
+    private final String name;
+    private final String category;
+    private final Money price;
+    private final TaxCode taxCode;
+    private final boolean digital;
+    private final boolean fragile;
+
+<span class="fc" id="L15">    public Product(String id, String name, String category, Money price, TaxCode taxCode, boolean digital, boolean fragile) {</span>
+<span class="fc" id="L16">        this.id = Objects.requireNonNull(id, &quot;id&quot;);</span>
+<span class="fc" id="L17">        this.name = Objects.requireNonNull(name, &quot;name&quot;);</span>
+<span class="fc" id="L18">        this.category = Objects.requireNonNull(category, &quot;category&quot;);</span>
+<span class="fc" id="L19">        this.price = Objects.requireNonNull(price, &quot;price&quot;);</span>
+<span class="fc" id="L20">        this.taxCode = Objects.requireNonNull(taxCode, &quot;taxCode&quot;);</span>
+<span class="fc" id="L21">        this.digital = digital;</span>
+<span class="fc" id="L22">        this.fragile = fragile;</span>
+<span class="fc" id="L23">    }</span>
+
+<span class="fc" id="L25">    public String id() { return id; }</span>
+<span class="nc" id="L26">    public String name() { return name; }</span>
+<span class="fc" id="L27">    public String category() { return category; }</span>
+<span class="fc" id="L28">    public Money price() { return price; }</span>
+<span class="fc" id="L29">    public TaxCode taxCode() { return taxCode; }</span>
+<span class="nc" id="L30">    public boolean isDigital() { return digital; }</span>
+<span class="fc" id="L31">    public boolean isFragile() { return fragile; }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

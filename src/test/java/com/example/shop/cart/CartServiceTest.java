@@ -75,6 +75,8 @@ class CartServiceTest {
         limitedLines.addItem("c1", p1.id(), 1);
         assertThrows(IllegalStateException.class, () -> limitedLines.addItem("c1", p2.id(), 1), "Should block when line limit reached");
         assertThrows(IllegalArgumentException.class, () -> limitedLines.updateQty("c1", p1.id(), 3), "Should block per-item limit");
+        assertDoesNotThrow(() -> limitedLines.updateQty("c1", p1.id(), 2), "Should allow updating to max quantity");
+        assertDoesNotThrow(() -> limitedLines.updateQty("c1", p1.id(), 1), "Should allow updating to a valid quantity");
     }
 
     @Test
@@ -92,11 +94,54 @@ class CartServiceTest {
     }
 
     @Test
+    void allowsUpdateToExactlyAvailableStock() {
+        InventoryService inv = new InventoryService();
+        Product p = new Product("p1", "Prod", "general", new Money(new BigDecimal("10.00"), usd), TaxCode.STANDARD, false, false);
+        inv.upsertStock(p.id(), 2);
+        CartService service = buildService(inv, Map.of(p.id(), p));
+        service.addItem("c1", p.id(), 1);
+
+        assertDoesNotThrow(() -> service.updateQty("c1", p.id(), 2));
+    }
+
+    @Test
+    void removesOnlyTheSpecifiedItem() {
+        InventoryService inv = new InventoryService();
+        Product p1 = new Product("p1", "Prod1", "general", new Money(new BigDecimal("10.00"), usd), TaxCode.STANDARD, false, false);
+        Product p2 = new Product("p2", "Prod2", "general", new Money(new BigDecimal("5.00"), usd), TaxCode.STANDARD, false, false);
+        inv.upsertStock(p1.id(), 10);
+        inv.upsertStock(p2.id(), 10);
+        CartService service = buildService(inv, Map.of(p1.id(), p1, p2.id(), p2));
+        service.addItem("c1", p1.id(), 1);
+        service.addItem("c1", p2.id(), 2);
+
+        Cart cart = service.removeItem("c1", p1.id());
+
+        assertEquals(1, cart.lines().size());
+        assertEquals(p2.id(), cart.lines().get(0).productId());
+    }
+
+    @Test
     void getCartOnNewIdReturnsEmptyTotals() {
         InventoryService inv = new InventoryService();
         CartService service = buildService(inv, Map.of());
         Cart cart = service.getCart("new");
         assertTrue(cart.lines().isEmpty());
         assertEquals(BigDecimal.ZERO.setScale(2), cart.total().raw());
+    }
+
+    @Test
+    void rejectsInvalidQuantities() {
+        InventoryService inv = new InventoryService();
+        Product p = new Product("p1", "Prod", "general", new Money(new BigDecimal("10.00"), usd), TaxCode.STANDARD, false, false);
+        inv.upsertStock(p.id(), 10);
+        CartService service = buildService(inv, Map.of(p.id(), p));
+        service.addItem("c1", p.id(), 1);
+
+        assertThrows(IllegalArgumentException.class, () -> service.addItem("c1", p.id(), 0));
+        assertThrows(IllegalArgumentException.class, () -> service.addItem("c1", p.id(), -1));
+        assertThrows(IllegalArgumentException.class, () -> service.updateQty("c1", p.id(), 0));
+        assertThrows(IllegalArgumentException.class, () -> service.updateQty("c1", p.id(), -1));
+        assertDoesNotThrow(() -> service.updateQty("c1", p.id(), 1));
     }
 }
